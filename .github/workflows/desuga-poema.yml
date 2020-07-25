@@ -1,16 +1,20 @@
 name: desuga-poema
-on: [push]
+on:
+    push:
+        branches:
+            - master
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        steps:
+            - uses: actions/checkout@v1
+        
+        - name: Add remote origin
+        run: |
+            git remote add heroku https://heroku:${{ secrets.HEROKU_DESUGA_POEMA_KEY }}@git.heroku.com/${{ secrets.HEROKU_DESUGA_POEMA_NAME }}.git
+
+        - name: Deploy to Heroku
+        run: |
+            git push heroku HEAD:master -f
